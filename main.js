@@ -62,7 +62,6 @@ function renderInfo(canvas,position, infos){
         info;
 
     ctx.beginPath();
-   // ctx.moveTo(position.x, position.y);
 
     for(i = 0; i < infos.length; i++){
         info = infos[i];
@@ -70,7 +69,7 @@ function renderInfo(canvas,position, infos){
         ctx.font="16px verdana";
         ctx.fillText(info,position.x, position.y + fontHeightDelta);
         fontHeightDelta = fontHeightDelta + 30;
-        //ctx.moveTo(postion.x, position.y + textMatrix.height);
+        
     }
 }
 
@@ -160,12 +159,22 @@ var renderer = (function(){
 })();
 
 window.addEventListener('keydown',function(ev){
-    var delta = 0.01;
+    var delta;
+
+    if(fanGlobals.rps % 60 < 3 || fanGlobals.rps % 60 > 57)
+    {
+        delta = 0.001;
+    } 
+    else {
+        delta = 0.01;
+    }
+
 	switch(ev.which){
-		case 40: renderer.setVelocity(renderer.getVelocity() - 0.01);
+		case 40: renderer.setVelocity(renderer.getVelocity() - delta);
+                 ev.preventDefault();
 				 break;
-		case 38: if(fanGlobals.rps % 60 < 3 || fanGlobals.rps % 60 > 57){delta = 0.001} else {delta = 0.01;} 
-                 renderer.setVelocity(renderer.getVelocity() + delta);
+		case 38: renderer.setVelocity(renderer.getVelocity() + delta);
+                 ev.preventDefault();
 			     break;
 		case 80: renderer.togglePause();
 			     break;
